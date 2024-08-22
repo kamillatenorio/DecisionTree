@@ -5,6 +5,8 @@ document.getElementById('collectDataBtn').addEventListener('click', function() {
     const datasetContainer = document.getElementById('datasetContainer');
     const decisionTreeContainer = document.getElementById('decisionTreeContainer');
 
+    let informationGains = []; // Array to store information gains of all trees
+
     if (button.textContent === "Collect Data") {
         const tableBody = document.getElementById('tableBody');
 
@@ -52,10 +54,28 @@ document.getElementById('collectDataBtn').addEventListener('click', function() {
         // Calculate initial entropy of the entire dataset
         const initialEntropy = calculateInitialEntropy(dataset);
 
-        // Generate the decision tree simulations
-        createDecisionTreeSimulation('Smile', dataset, imageSources, initialEntropy);
-        createDecisionTreeSimulation('X-eyes', dataset, imageSources, initialEntropy);
-        createDecisionTreeSimulation('Blink', dataset, imageSources, initialEntropy);
+        // Generate the decision tree simulations and store information gains
+        informationGains.push(createDecisionTreeSimulation('Smile', dataset, imageSources, initialEntropy));
+        informationGains.push(createDecisionTreeSimulation('X-eyes', dataset, imageSources, initialEntropy, ['X-eyes', 'No X-eyes']));
+        informationGains.push(createDecisionTreeSimulation('Blink', dataset, imageSources, initialEntropy));
+
+        // Determine the maximum information gain
+        const maxInformationGain = Math.max(...informationGains);
+
+        // Make each tree clickable and validate the selection
+        const treeNodes = document.querySelectorAll('.tree-node');
+        treeNodes.forEach((treeNode, index) => {
+            treeNode.style.cursor = 'pointer'; // Make the cursor a pointer to indicate it's clickable
+
+            treeNode.addEventListener('click', () => {
+                if (informationGains[index] === maxInformationGain) {
+                    alert(`Correct! The ${treeNode.querySelector('.ellipse').textContent} tree has the highest information gain.`);
+                    // Proceed to the next step or further action
+                } else {
+                    alert("The decision tree learning algorithm should choose the feature that generates more information gain.");
+                }
+            });
+        });
     }
 });
 
@@ -97,7 +117,7 @@ function calculateInitialEntropy(dataset) {
     return calculateEntropy(biteCount, notBiteCount);
 }
 
-function createDecisionTreeSimulation(feature, dataset, imageSources, initialEntropy) {
+function createDecisionTreeSimulation(feature, dataset, imageSources, initialEntropy, customLabels = null) {
     const featureIndex = { 'Smile': 0, 'X-eyes': 1, 'Blink': 2 }[feature];
     const uniqueValues = [...new Set(dataset.map(row => row[featureIndex]))];
     const decisionTreeContainer = document.getElementById('decisionTreeContainer');
@@ -118,16 +138,26 @@ function createDecisionTreeSimulation(feature, dataset, imageSources, initialEnt
     let branchEntropies = [];
     let branchSizes = [];
 
-    uniqueValues.forEach(value => {
+    uniqueValues.forEach((value, index) => {
         const branchContainer = document.createElement('div');
         branchContainer.className = 'branch';
 
-        const arrow = document.createElement('div');
-        arrow.className = 'arrow';
-
         const arrowLabel = document.createElement('div');
         arrowLabel.className = 'arrow-label';
-        arrowLabel.textContent = value;
+        // Use custom labels if provided, otherwise use the value directly
+        arrowLabel.textContent = customLabels ? customLabels[index] : value;
+
+        const line = document.createElement('div');
+        line.className = 'line';
+        line.style.transform = index === 0 ? 'rotate(45deg)' : 'rotate(-45deg)'; // Rotate the line
+
+        const labelRect = document.createElement('div');
+        labelRect.className = 'label-rect';
+        labelRect.textContent = index === 0 ? 'Bite' : 'Do not Bite';
+        labelRect.style.border = '1px solid #000';
+        labelRect.style.borderRadius = '5px';
+        labelRect.style.padding = '5px';
+        labelRect.style.margin = '10px 0';
 
         const imagesContainer = document.createElement('div');
         imagesContainer.className = 'images-container';
@@ -135,10 +165,10 @@ function createDecisionTreeSimulation(feature, dataset, imageSources, initialEnt
         let biteCount = 0;
         let notBiteCount = 0;
 
-        dataset.forEach((row, index) => {
+        dataset.forEach((row, rowIndex) => {
             if (row[featureIndex] === value) {
                 const img = document.createElement('img');
-                img.src = imageSources[index];
+                img.src = imageSources[rowIndex];
                 imagesContainer.appendChild(img);
 
                 if (row[3] === 1) {
@@ -163,8 +193,9 @@ function createDecisionTreeSimulation(feature, dataset, imageSources, initialEnt
         entropyDisplay.className = 'entropy';
         entropyDisplay.textContent = `Entropy: ${entropy.toFixed(2)}`;
 
-        branchContainer.appendChild(arrowLabel); // Add the label above the arrow
-        branchContainer.appendChild(arrow);
+        branchContainer.appendChild(arrowLabel); // Add the label above the line
+        branchContainer.appendChild(line); // Add the line between ellipse and rectangle
+        branchContainer.appendChild(labelRect); // Add the labeled rectangle
         branchContainer.appendChild(imagesContainer);
         branchContainer.appendChild(biteStats);
         branchContainer.appendChild(entropyDisplay);
@@ -194,6 +225,8 @@ function createDecisionTreeSimulation(feature, dataset, imageSources, initialEnt
     treeContainer.appendChild(informationGainDisplay);
 
     decisionTreeContainer.appendChild(treeContainer);
+
+    return informationGain; // Return the information gain for this tree
 }
 
 // Global variables to make them accessible in both phases
@@ -210,7 +243,6 @@ const dataset = [
     ["Not Smile", "No X-eyes", "No Blink", 0],
     ["Not Smile", "No X-eyes", "No Blink", 0],
     ["Not Smile", "No X-eyes", "No Blink", 0],
-
 ];
 
 const imageSources = [
