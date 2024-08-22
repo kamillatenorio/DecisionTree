@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decision Tree</title>
+    <style>
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        hr {
+            margin: 20px 0;
+        }
+        button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #datasetContainer {
+            margin-top: 20px;
+        }
+        .table-container {
+            display: flex;
+            align-items: flex-start;
+        }
+        img {
+            max-width: 50px;
+            height: auto;
+            margin-right: 10px;
+        }
+        .dataset-table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-left: 10px;
+        }
+        .dataset-table th, .dataset-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+            margin: 0;
+            height: 40px;
+        }
+        .dataset-table th:first-child, 
+        .dataset-table td:first-child {
+            border: none;
+        }
+        .dataset-table th:first-child {
+            background-color: white;
+        }
+        .decision-tree {
+            margin-top: 40px;
+            display: flex;
+            justify-content: space-around;
+        }
+        .tree-node {
+            text-align: center;
+            width: 300px;
+            position: relative;
+        }
+        .ellipse {
+            width: 120px;
+            height: 70px;
+            border-radius: 50%;
+            border: 2px solid black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            background-color: white;
+            position: relative;
+        }
+        .arrow {
+            width: 2px;
+            height: 50px;
+            background-color: black;
+            margin: 10px auto;
+            position: relative;
+        }
+        .arrow:before,
+        .arrow:after {
+            content: '';
+            position: absolute;
+            border-top: 10px solid black;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+        }
+        .arrow:before {
+            top: 0;
+            left: -12px;
+        }
+        .arrow:after {
+            top: 0;
+            right: -12px;
+        }
+        .arrow-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .arrow-container .branch {
+            width: 45%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .images-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        .bite-stats {
+            font-weight: bold;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="phaseTitle">Data Collection Phase</h1>
+        <hr/>
+        <div id="controls">
+            <p id="message">
+                The decision tree algorithm needs labelled data from previous monkeys to learn a model from. 
+                <br/>João made some observations and collected some characteristics of the monkeys such as type of smiles and the format of eyes (our feature) and their corresponding correct answers, i.e., if they bite or not (our label).
+            </p>
+            <button id="collectDataBtn">Collect Data</button>
+        </div>
+        <div id="datasetContainer" style="display:none;">
+            <div class="table-container">
+                <table class="dataset-table">
+                    <thead>
+                        <tr>
+                            <th></th> 
+                            <th>Smile</th>
+                            <th>X-Eyes</th>
+                            <th>Blink</th>
+                            <th>Bite/Not Bite</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div id="decisionTreeContainer" class="decision-tree"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
