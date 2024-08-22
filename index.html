@@ -58,11 +58,16 @@
             margin-top: 40px;
             display: flex;
             justify-content: space-around;
+            align-items: flex-start;
         }
         .tree-node {
             text-align: center;
             width: 300px;
             position: relative;
+            border: 2px solid #333; /* Add border around each tree */
+            padding: 20px;
+            border-radius: 10px; /* Rounded corners */
+            background-color: #f9f9f9; /* Light background color */
         }
         .ellipse {
             width: 120px;
@@ -76,39 +81,33 @@
             background-color: white;
             position: relative;
         }
-        .arrow {
-            width: 2px;
-            height: 50px;
-            background-color: black;
-            margin: 10px auto;
-            position: relative;
-        }
-        .arrow:before,
-        .arrow:after {
-            content: '';
-            position: absolute;
-            border-top: 10px solid black;
-            border-left: 10px solid transparent;
-            border-right: 10px solid transparent;
-        }
-        .arrow:before {
-            top: 0;
-            left: -12px;
-        }
-        .arrow:after {
-            top: 0;
-            right: -12px;
-        }
         .arrow-container {
             display: flex;
             justify-content: space-between;
-            margin-top: 20px;
+            position: relative;
+            margin-top: 10px;
         }
-        .arrow-container .branch {
+        .branch {
+            text-align: center;
+            position: relative;
             width: 45%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        }
+        .branch .arrow {
+            width: 2px;
+            height: 50px;
+            background-color: black;
+            margin: 0 auto;
+            position: relative;
+        }
+        .branch .arrow:after {
+            content: '';
+            position: absolute;
+            left: -4px;
+            top: 50px;
+            border: solid black;
+            border-width: 0 3px 3px 0;
+            padding: 5px;
+            transform: rotate(45deg);
         }
         .images-container {
             display: flex;
@@ -116,7 +115,7 @@
             flex-wrap: wrap;
             margin-top: 10px;
         }
-        .bite-stats {
+        .bite-stats, .entropy, .tree-entropy, .information-gain {
             font-weight: bold;
             margin-top: 5px;
         }

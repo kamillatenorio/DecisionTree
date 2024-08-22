@@ -49,14 +49,55 @@ document.getElementById('collectDataBtn').addEventListener('click', function() {
         datasetContainer.style.display = 'none'; // Hide dataset
         decisionTreeContainer.innerHTML = ''; // Clear any previous trees
 
+        // Calculate initial entropy of the entire dataset
+        const initialEntropy = calculateInitialEntropy(dataset);
+
         // Generate the decision tree simulations
-        createDecisionTreeSimulation('Smile', dataset, imageSources);
-        createDecisionTreeSimulation('X-eyes', dataset, imageSources);
-        createDecisionTreeSimulation('Blink', dataset, imageSources);
+        createDecisionTreeSimulation('Smile', dataset, imageSources, initialEntropy);
+        createDecisionTreeSimulation('X-eyes', dataset, imageSources, initialEntropy);
+        createDecisionTreeSimulation('Blink', dataset, imageSources, initialEntropy);
     }
 });
 
-function createDecisionTreeSimulation(feature, dataset, imageSources) {
+// Function to calculate entropy
+function calculateEntropy(biteCount, notBiteCount) {
+    const total = biteCount + notBiteCount;
+    const pBite = biteCount / total;
+    const pNotBite = notBiteCount / total;
+
+    // Handle cases where pBite or pNotBite are 0 to avoid log2(0)
+    const entropyBite = pBite === 0 ? 0 : -pBite * Math.log2(pBite);
+    const entropyNotBite = pNotBite === 0 ? 0 : -pNotBite * Math.log2(pNotBite);
+
+    return entropyBite + entropyNotBite;
+}
+
+// Function to calculate weighted entropy for the entire tree
+function calculateTreeEntropy(branchEntropies, branchSizes) {
+    const totalSize = branchSizes.reduce((sum, size) => sum + size, 0);
+    const weightedEntropy = branchEntropies.reduce((sum, entropy, index) => {
+        return sum + (entropy * branchSizes[index]) / totalSize;
+    }, 0);
+    return weightedEntropy;
+}
+
+// Function to calculate the initial entropy of the entire dataset
+function calculateInitialEntropy(dataset) {
+    let biteCount = 0;
+    let notBiteCount = 0;
+
+    dataset.forEach(row => {
+        if (row[3] === 1) {
+            biteCount++;
+        } else {
+            notBiteCount++;
+        }
+    });
+
+    return calculateEntropy(biteCount, notBiteCount);
+}
+
+function createDecisionTreeSimulation(feature, dataset, imageSources, initialEntropy) {
     const featureIndex = { 'Smile': 0, 'X-eyes': 1, 'Blink': 2 }[feature];
     const uniqueValues = [...new Set(dataset.map(row => row[featureIndex]))];
     const decisionTreeContainer = document.getElementById('decisionTreeContainer');
@@ -74,6 +115,9 @@ function createDecisionTreeSimulation(feature, dataset, imageSources) {
     const arrowContainer = document.createElement('div');
     arrowContainer.className = 'arrow-container';
 
+    let branchEntropies = [];
+    let branchSizes = [];
+
     uniqueValues.forEach(value => {
         const branchContainer = document.createElement('div');
         branchContainer.className = 'branch';
@@ -84,8 +128,8 @@ function createDecisionTreeSimulation(feature, dataset, imageSources) {
         const imagesContainer = document.createElement('div');
         imagesContainer.className = 'images-container';
 
-        let totalCount = 0;
         let biteCount = 0;
+        let notBiteCount = 0;
 
         dataset.forEach((row, index) => {
             if (row[featureIndex] === value) {
@@ -93,25 +137,57 @@ function createDecisionTreeSimulation(feature, dataset, imageSources) {
                 img.src = imageSources[index];
                 imagesContainer.appendChild(img);
 
-                totalCount++;
                 if (row[3] === 1) {
                     biteCount++;
+                } else {
+                    notBiteCount++;
                 }
             }
         });
+
+        const totalCount = biteCount + notBiteCount;
+        const entropy = calculateEntropy(biteCount, notBiteCount);
+
+        branchEntropies.push(entropy);
+        branchSizes.push(totalCount);
 
         const biteStats = document.createElement('div');
         biteStats.className = 'bite-stats';
         biteStats.textContent = `${biteCount}/${totalCount} bites`;
 
+        const entropyDisplay = document.createElement('div');
+        entropyDisplay.className = 'entropy';
+        entropyDisplay.textContent = `Entropy: ${entropy.toFixed(2)}`;
+
         branchContainer.appendChild(arrow);
         branchContainer.appendChild(imagesContainer);
         branchContainer.appendChild(biteStats);
+        branchContainer.appendChild(entropyDisplay);
 
         arrowContainer.appendChild(branchContainer);
     });
 
     treeContainer.appendChild(arrowContainer);
+
+    // Calculate and display the overall tree entropy
+    const treeEntropy = calculateTreeEntropy(branchEntropies, branchSizes);
+    const informationGain = initialEntropy - treeEntropy;
+
+    const treeEntropyDisplay = document.createElement('div');
+    treeEntropyDisplay.className = 'tree-entropy';
+    treeEntropyDisplay.style.fontWeight = 'bold';
+    treeEntropyDisplay.style.marginTop = '20px';
+    treeEntropyDisplay.textContent = `Tree Entropy: ${treeEntropy.toFixed(2)}`;
+
+    const informationGainDisplay = document.createElement('div');
+    informationGainDisplay.className = 'information-gain';
+    informationGainDisplay.style.fontWeight = 'bold';
+    informationGainDisplay.style.marginTop = '10px';
+    informationGainDisplay.textContent = `Information Gain: ${informationGain.toFixed(2)}`;
+
+    treeContainer.appendChild(treeEntropyDisplay);
+    treeContainer.appendChild(informationGainDisplay);
+
     decisionTreeContainer.appendChild(treeContainer);
 }
 
