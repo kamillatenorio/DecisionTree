@@ -125,6 +125,10 @@ function createDecisionTreeSimulation(feature, dataset, imageSources, initialEnt
         const arrow = document.createElement('div');
         arrow.className = 'arrow';
 
+        const arrowLabel = document.createElement('div');
+        arrowLabel.className = 'arrow-label';
+        arrowLabel.textContent = value;
+
         const imagesContainer = document.createElement('div');
         imagesContainer.className = 'images-container';
 
@@ -159,6 +163,7 @@ function createDecisionTreeSimulation(feature, dataset, imageSources, initialEnt
         entropyDisplay.className = 'entropy';
         entropyDisplay.textContent = `Entropy: ${entropy.toFixed(2)}`;
 
+        branchContainer.appendChild(arrowLabel); // Add the label above the arrow
         branchContainer.appendChild(arrow);
         branchContainer.appendChild(imagesContainer);
         branchContainer.appendChild(biteStats);
@@ -205,6 +210,7 @@ const dataset = [
     ["Not Smile", "No X-eyes", "No Blink", 0],
     ["Not Smile", "No X-eyes", "No Blink", 0],
     ["Not Smile", "No X-eyes", "No Blink", 0],
+
 ];
 
 const imageSources = [
