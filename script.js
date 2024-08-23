@@ -56,7 +56,7 @@ document.getElementById('collectDataBtn').addEventListener('click', function() {
 
         // Generate the decision tree simulations and store information gains
         informationGains.push(createDecisionTreeSimulation('Smile', dataset, imageSources, initialEntropy));
-        informationGains.push(createDecisionTreeSimulation('X-eyes', dataset, imageSources, initialEntropy, ['X-eyes', 'No X-eyes']));
+        informationGains.push(createDecisionTreeSimulation('X-eyes', dataset, imageSources, initialEntropy, ['No X-eyes', 'X-eyes'])); // Corrected label order
         informationGains.push(createDecisionTreeSimulation('Blink', dataset, imageSources, initialEntropy));
 
         // Determine the maximum information gain
