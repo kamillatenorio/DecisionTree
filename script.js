@@ -60,7 +60,7 @@ document.getElementById('collectDataBtn').addEventListener('click', function() {
         // Generate the decision tree simulations and store information gains
         informationGains.push(createDecisionTreeSimulation('Smile', dataset, imageSources, initialEntropy));
         informationGains.push(createDecisionTreeSimulation('X-eyes', dataset, imageSources, initialEntropy, ['No X-eyes', 'X-eyes']));
-        informationGains.push(createDecisionTreeSimulation('Blink', dataset, imageSources, initialEntropy));
+        informationGains.push(createDecisionTreeSimulation('Blink', dataset, imageSources, initialEntropy, ['No Blink', 'Blink']));
 
         // Determine the maximum information gain
         const maxInformationGain = Math.max(...informationGains);
@@ -82,7 +82,7 @@ document.getElementById('collectDataBtn').addEventListener('click', function() {
                     createSecondStepTree('X-eyes', dataset, imageSources, true); // Increase width for the second step
                     createSecondStepTree('Blink', dataset, imageSources, true); // Increase width for the second step
                 } else {
-                    alert("The decision tree learning algorithm should choose the feature that generates more information gain.");
+                    alert("The decision tree learning algorithm should choose the feature that generates more information gain. Please try again.");
                 }
             });
         });
@@ -95,7 +95,6 @@ function calculateEntropy(biteCount, notBiteCount) {
     const pBite = biteCount / total;
     const pNotBite = notBiteCount / total;
 
-    // Handle cases where pBite or pNotBite are 0 to avoid log2(0)
     const entropyBite = pBite === 0 ? 0 : -pBite * Math.log2(pBite);
     const entropyNotBite = pNotBite === 0 ? 0 : -pNotBite * Math.log2(pNotBite);
 
@@ -125,6 +124,12 @@ function calculateInitialEntropy(dataset) {
     });
 
     return calculateEntropy(biteCount, notBiteCount);
+}
+
+// Function to calculate the information gain after a split
+function calculateInformationGain(initialEntropy, branchEntropies, branchSizes) {
+    const weightedEntropy = calculateTreeEntropy(branchEntropies, branchSizes);
+    return initialEntropy - weightedEntropy;
 }
 
 // Function to create the first step decision tree
@@ -160,7 +165,7 @@ function createDecisionTreeSimulation(feature, dataset, imageSources, initialEnt
 
         const line = document.createElement('div');
         line.className = 'line';
-        line.style.transform = index === 0 ? 'rotate(45deg)' : 'rotate(-45deg)'; // Rotate the line
+        line.style.transform = index === 0 ? 'rotate(45deg)' : 'rotate(-45deg)'; // Rotate the line for left and right
 
         const labelRect = document.createElement('div');
         labelRect.className = 'label-rect';
@@ -174,7 +179,7 @@ function createDecisionTreeSimulation(feature, dataset, imageSources, initialEnt
         imagesContainer.className = 'images-container';
 
         let biteCount = 0;
-        let notBiteCount = 0;
+        let totalCount = 0;
 
         dataset.forEach((row, rowIndex) => {
             if (row[featureIndex] === value) {
@@ -184,21 +189,19 @@ function createDecisionTreeSimulation(feature, dataset, imageSources, initialEnt
 
                 if (row[3] === 1) {
                     biteCount++;
-                } else {
-                    notBiteCount++;
                 }
+                totalCount++;
             }
         });
 
-        const totalCount = biteCount + notBiteCount;
-        const entropy = calculateEntropy(biteCount, notBiteCount);
+        const entropy = calculateEntropy(biteCount, totalCount - biteCount);
 
         branchEntropies.push(entropy);
         branchSizes.push(totalCount);
 
         const biteStats = document.createElement('div');
         biteStats.className = 'bite-stats';
-        biteStats.textContent = `${biteCount}/${totalCount} bites`;
+        biteStats.textContent = `${biteCount}/${totalCount} ${biteCount === 1 ? 'bite' : 'bites'}`;
 
         const entropyDisplay = document.createElement('div');
         entropyDisplay.className = 'entropy';
@@ -208,8 +211,16 @@ function createDecisionTreeSimulation(feature, dataset, imageSources, initialEnt
         branchContainer.appendChild(line); // Add the line between ellipse and rectangle
         branchContainer.appendChild(labelRect); // Add the labeled rectangle
         branchContainer.appendChild(imagesContainer);
-        branchContainer.appendChild(biteStats);
+        branchContainer.appendChild(biteStats); // Add the bite stats below the images
         branchContainer.appendChild(entropyDisplay);
+
+        // Add Information Gain below the monkeys
+        const informationGain = calculateInformationGain(initialEntropy, [entropy], [totalCount]);
+        const informationGainDisplay = document.createElement('div');
+        informationGainDisplay.className = 'information-gain';
+        informationGainDisplay.style.marginTop = '5px';
+        informationGainDisplay.textContent = `Information Gain: ${informationGain.toFixed(2)}`;
+        branchContainer.appendChild(informationGainDisplay);
 
         arrowContainer.appendChild(branchContainer);
     });
@@ -230,7 +241,7 @@ function createDecisionTreeSimulation(feature, dataset, imageSources, initialEnt
     informationGainDisplay.className = 'information-gain';
     informationGainDisplay.style.fontWeight = 'bold';
     informationGainDisplay.style.marginTop = '10px';
-    informationGainDisplay.textContent = `Information Gain: ${informationGain.toFixed(2)}`;
+    informationGainDisplay.textContent = `Overall Information Gain: ${informationGain.toFixed(2)}`;
 
     treeContainer.appendChild(treeEntropyDisplay);
     treeContainer.appendChild(informationGainDisplay);
@@ -262,7 +273,7 @@ function createSecondStepTree(secondFeature, dataset, imageSources, isSecondStep
     arrowContainer.className = 'arrow-container';
 
     // Left branch (Smile)
-    const leftBranch = createBranch('Smile', 'Bites', dataset.filter(row => row[0] === 'Smile'), imageSources);
+    const leftBranch = createBranch('Smile', 'Bites', dataset.filter(row => row[0] === 'Smile'), imageSources, true);
     arrowContainer.appendChild(leftBranch);
 
     // Right branch (Not Smile -> Second Feature)
@@ -285,7 +296,7 @@ function createSecondStepTree(secondFeature, dataset, imageSources, isSecondStep
     secondArrowContainer.className = 'arrow-container';
 
     // Second Feature branches
-    const secondBranch1 = createBranch(`${secondFeature}`, `${secondFeature}`, dataset.filter(row => row[0] === 'Not Smile' && row[secondFeatureIndex(secondFeature)] === `${secondFeature}`), imageSources);
+    const secondBranch1 = createBranch(`${secondFeature}`, `${secondFeature}`, dataset.filter(row => row[0] === 'Not Smile' && row[secondFeatureIndex(secondFeature)] === `${secondFeature}`), imageSources, true);
     const secondBranch2 = createBranch(`No ${secondFeature}`, `No ${secondFeature}`, dataset.filter(row => row[0] === 'Not Smile' && row[secondFeatureIndex(secondFeature)] !== `${secondFeature}`), imageSources);
 
     secondArrowContainer.appendChild(secondBranch1);
@@ -300,6 +311,39 @@ function createSecondStepTree(secondFeature, dataset, imageSources, isSecondStep
 
     treeContainer.appendChild(arrowContainer);
 
+    // Calculate overall information gain for this split
+    const initialEntropy = calculateInitialEntropy(dataset.filter(row => row[0] === 'Not Smile'));
+    const overallInformationGain = calculateInformationGain(
+        initialEntropy,
+        [secondBranch1.entropy, secondBranch2.entropy],
+        [secondBranch1.totalCount, secondBranch2.totalCount]
+    );
+
+    const overallInfoGainDisplay = document.createElement('div');
+    overallInfoGainDisplay.className = 'information-gain';
+    overallInfoGainDisplay.style.fontWeight = 'bold';
+    overallInfoGainDisplay.style.marginTop = '10px';
+    overallInfoGainDisplay.textContent = `Overall Information Gain: ${overallInformationGain.toFixed(2)}`;
+
+    // Add click functionality
+    treeContainer.style.cursor = 'pointer'; // Indicate it's clickable
+    treeContainer.addEventListener('click', function() {
+        const allGains = document.querySelectorAll('.information-gain');
+        let maxGain = -Infinity;
+        allGains.forEach(gain => {
+            const gainValue = parseFloat(gain.textContent.split(': ')[1]);
+            if (gainValue > maxGain) maxGain = gainValue;
+        });
+
+        if (overallInformationGain.toFixed(2) == maxGain.toFixed(2)) {
+            alert("Correct! You selected the tree with the highest information gain.");
+        } else {
+            alert("Incorrect. Try selecting the tree with the highest information gain.");
+        }
+    });
+
+    treeContainer.appendChild(overallInfoGainDisplay);
+
     decisionTreeContainer.appendChild(treeContainer);
 }
 
@@ -308,14 +352,14 @@ function secondFeatureIndex(feature) {
     return { 'X-eyes': 1, 'Blink': 2 }[feature];
 }
 
-// Function to create a branch with a label and associated images
-function createBranch(label, branchLabel, filteredDataset, imageSources) {
+// Function to create a branch with a label, associated images, and bite stats
+function createBranch(label, branchLabel, filteredDataset, imageSources, isLeft = false) {
     const branchContainer = document.createElement('div');
     branchContainer.className = 'branch';
 
     const line = document.createElement('div');
     line.className = 'line';
-    line.style.transform = label === 'Smile' ? 'rotate(45deg)' : 'rotate(-45deg)';
+    line.style.transform = isLeft ? 'rotate(45deg)' : 'rotate(-45deg)'; // Rotate the line only for the left branch
 
     const arrowLabel = document.createElement('div');
     arrowLabel.className = 'arrow-label';
@@ -332,16 +376,40 @@ function createBranch(label, branchLabel, filteredDataset, imageSources) {
     const imagesContainer = document.createElement('div');
     imagesContainer.className = 'images-container';
 
+    let biteCount = 0;
+    let totalCount = 0;
+
     filteredDataset.forEach((row, rowIndex) => {
         const img = document.createElement('img');
         img.src = imageSources[dataset.indexOf(row)];
         imagesContainer.appendChild(img);
+
+        if (row[3] === 1) {
+            biteCount++;
+        }
+        totalCount++;
     });
+
+    const entropy = calculateEntropy(biteCount, totalCount - biteCount);
+
+    const biteStats = document.createElement('div');
+    biteStats.className = 'bite-stats';
+    biteStats.textContent = `${biteCount}/${totalCount} ${biteCount === 1 ? 'bite' : 'bites'}`;
+
+    const entropyDisplay = document.createElement('div');
+    entropyDisplay.className = 'entropy';
+    entropyDisplay.textContent = `Entropy: ${entropy.toFixed(2)}`;
 
     branchContainer.appendChild(arrowLabel);
     branchContainer.appendChild(line);
     branchContainer.appendChild(labelRect);
     branchContainer.appendChild(imagesContainer);
+    branchContainer.appendChild(biteStats); // Add bite stats below images
+    branchContainer.appendChild(entropyDisplay); // Add entropy below images
+
+    // Store the entropy and counts in the branch container
+    branchContainer.entropy = entropy;
+    branchContainer.totalCount = totalCount;
 
     return branchContainer;
 }
