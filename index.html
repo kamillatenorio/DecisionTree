@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
     <title>Decision Tree</title>
     <style>
         .container {
@@ -131,6 +132,14 @@
             margin: 0 auto;
             transform-origin: top center;
         }
+        .intro-image {
+            margin-top: 20px;
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
     </style>
 </head>
 <body>
@@ -140,8 +149,10 @@
         <div id="controls">
             <p id="message">
                 The decision tree algorithm needs labelled data from previous monkeys to learn a model from. 
-                <br/>João made some observations and collected some characteristics of the monkeys such as type of smiles and the format of eyes (our feature) and their corresponding correct answers, i.e., if they bite or not (our label).
+                <br>Below we have the monkeys that we are already know  if they bite or not (our label).
+                <br/> <img src="Dataset.png" alt="Biting and Non-biting Monkeys" class="intro-image">
             </p>
+            <br/>
             <button id="collectDataBtn">Collect Data</button>
         </div>
         <div id="datasetContainer" style="display:none;">

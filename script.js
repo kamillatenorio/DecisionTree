@@ -128,6 +128,9 @@ function handleStepII() {
 
                 // Clear images, entropy, information gain, and bite stats from the final tree and add proper rectangles
                 clearFinalTreeAndAddLabels(treeNode);
+
+                // Add the "Evaluate your model" button below the tree
+                addEvaluateButton();
             } else {
                 alert("The decision tree learning algorithm should choose the feature that generates more information gain. Please try again.");
             }
@@ -182,6 +185,27 @@ function clearFinalTreeAndAddLabels(treeNode) {
     // Make the final tree unclickable
     treeNode.style.cursor = 'default';
     treeNode.replaceWith(treeNode.cloneNode(true)); // Remove event listeners by cloning the node
+}
+
+// Function to add "Evaluate your model" button below the final tree
+function addEvaluateButton() {
+    const decisionTreeContainer = document.getElementById('decisionTreeContainer');
+
+    const evaluateButton = document.createElement('button');
+    evaluateButton.textContent = "Evaluate your model";
+    evaluateButton.id = "evaluateButton";
+    evaluateButton.style.marginTop = "20px";
+    evaluateButton.style.padding = "10px 20px";
+    evaluateButton.style.fontSize = "16px";
+    evaluateButton.style.display = "block";
+    evaluateButton.style.margin = "20px auto";
+
+    decisionTreeContainer.appendChild(evaluateButton);
+
+    // Add event listener to the button
+    evaluateButton.addEventListener('click', () => {
+        alert("Model evaluation functionality is not yet implemented.");
+    });
 }
 
 // Function to calculate entropy
@@ -450,6 +474,9 @@ function createSecondStepTree(secondFeature, dataset, imageSources, isSecondStep
 
             // Clear images, entropy, information gain, and bite stats from the final tree and add proper rectangles
             clearFinalTreeAndAddLabels(treeContainer);
+
+            // Add the "Evaluate your model" button
+            addEvaluateButton();
         } else {
             alert("Incorrect. Try selecting the tree with the highest information gain.");
         }
