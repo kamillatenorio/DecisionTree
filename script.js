@@ -79,8 +79,8 @@ document.getElementById('collectDataBtn').addEventListener('click', function() {
                     decisionTreeContainer.innerHTML = '';
 
                     // Create two new trees with "Smile" as root and "X-eyes" and "Blink" as the second node respectively
-                    createSecondStepTree('X-eyes', dataset, imageSources);
-                    createSecondStepTree('Blink', dataset, imageSources);
+                    createSecondStepTree('X-eyes', dataset, imageSources, true); // Increase width for the second step
+                    createSecondStepTree('Blink', dataset, imageSources, true); // Increase width for the second step
                 } else {
                     alert("The decision tree learning algorithm should choose the feature that generates more information gain.");
                 }
@@ -240,12 +240,17 @@ function createDecisionTreeSimulation(feature, dataset, imageSources, initialEnt
     return informationGain; // Return the information gain for this tree
 }
 
-// Function to create the second-step trees
-function createSecondStepTree(secondFeature, dataset, imageSources) {
+// Function to create the second-step trees with adjustable width
+function createSecondStepTree(secondFeature, dataset, imageSources, isSecondStep = false) {
     const decisionTreeContainer = document.getElementById('decisionTreeContainer');
 
     const treeContainer = document.createElement('div');
     treeContainer.className = 'tree-node';
+
+    // Adjust width if it's the second step
+    if (isSecondStep) {
+        treeContainer.style.width = '500px'; // Increase width for second step
+    }
 
     // Root node: Smile
     const rootNode = document.createElement('div');
@@ -341,7 +346,7 @@ function createBranch(label, branchLabel, filteredDataset, imageSources) {
     return branchContainer;
 }
 
-// Global variables to make them accessible in both phases
+// Updated dataset as provided
 const dataset = [
     ["Smile", "No X-eyes", "Blink", 1],
     ["Smile", "X-eyes", "No Blink", 1],
