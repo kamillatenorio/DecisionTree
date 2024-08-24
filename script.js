@@ -72,15 +72,20 @@ document.getElementById('collectDataBtn').addEventListener('click', function() {
 
             treeNode.addEventListener('click', () => {
                 if (informationGains[index] === maxInformationGain) {
-                    // Update the message for the next step
+                    // Hide all other rectangles except the selected one
+                    treeNodes.forEach((node, nodeIndex) => {
+                        if (nodeIndex !== index) {
+                            node.style.display = 'none';
+                        }
+                    });
+
+                    // Proceed to the next phase with the selected rectangle
                     message.innerHTML = "The second step is focusing just on the left part or sometimes called the left branch of the decision tree to decide what nodes to put over there. Since the left node is 100% one class, the mission now is to discover what should be the next feature on the right side.";
 
-                    // Clear previous trees and show new options
-                    decisionTreeContainer.innerHTML = '';
-
-                    // Create two new trees with "Smile" as root and "X-eyes" and "Blink" as the second node respectively
-                    createSecondStepTree('X-eyes', dataset, imageSources, true); // Increase width for the second step
-                    createSecondStepTree('Blink', dataset, imageSources, true); // Increase width for the second step
+                    // Create the next set of trees for the second phase
+                    decisionTreeContainer.innerHTML = ''; // Clear previous trees
+                    createSecondStepTree('X-eyes', dataset, imageSources, true); // Generate tree with "X-eyes"
+                    createSecondStepTree('Blink', dataset, imageSources, true);  // Generate tree with "Blink"
                 } else {
                     alert("The decision tree learning algorithm should choose the feature that generates more information gain. Please try again.");
                 }
@@ -336,7 +341,15 @@ function createSecondStepTree(secondFeature, dataset, imageSources, isSecondStep
         });
 
         if (overallInformationGain.toFixed(2) == maxGain.toFixed(2)) {
-            alert("Correct! You selected the tree with the highest information gain.");
+            // Hide all other rectangles except the selected one
+            const allTrees = document.querySelectorAll('.tree-node');
+            allTrees.forEach(tree => {
+                if (tree !== treeContainer) {
+                    tree.style.display = 'none';
+                }
+            });
+
+            alert("Correct! Proceeding with the selected tree.");
         } else {
             alert("Incorrect. Try selecting the tree with the highest information gain.");
         }
