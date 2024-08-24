@@ -47,6 +47,9 @@ document.getElementById('collectDataBtn').addEventListener('click', function() {
         // Update the message text to the training phase instructions
         message.innerHTML = "1. The first step in the learning process is to decide which feature to use at the root node. That is the first node at the very top of the decision tree. But how do you choose what feature to split on at each node? The decision tree learning algorithm has to choose between the features Smile, X-eyes, and Blink. Which of these features results in the greatest purity of the labels on the left and right sub-branches?";
 
+        // Hide the button
+        button.style.display = 'none';
+
         // Clear the dataset display
         datasetContainer.style.display = 'none'; // Hide dataset
         decisionTreeContainer.innerHTML = ''; // Clear any previous trees
@@ -69,8 +72,15 @@ document.getElementById('collectDataBtn').addEventListener('click', function() {
 
             treeNode.addEventListener('click', () => {
                 if (informationGains[index] === maxInformationGain) {
-                    alert(`Correct! The ${treeNode.querySelector('.ellipse').textContent} tree has the highest information gain.`);
-                    // Proceed to the next step or further action
+                    // Update the message for the next step
+                    message.innerHTML = "The second step is focusing just on the left part or sometimes called the left branch of the decision tree to decide what nodes to put over there. Since the left node is 100% one class, the mission now is to discover what should be the next feature on the right side.";
+
+                    // Clear previous trees and show new options
+                    decisionTreeContainer.innerHTML = '';
+
+                    // Simulate two new trees for the right branch
+                    createDecisionTreeSimulation('X-eyes', dataset, imageSources, initialEntropy, ['X-eyes', 'No X-eyes'], true);
+                    createDecisionTreeSimulation('Blink', dataset, imageSources, initialEntropy, ['Blink', 'No Blink'], true);
                 } else {
                     alert("The decision tree learning algorithm should choose the feature that generates more information gain.");
                 }
@@ -117,10 +127,15 @@ function calculateInitialEntropy(dataset) {
     return calculateEntropy(biteCount, notBiteCount);
 }
 
-function createDecisionTreeSimulation(feature, dataset, imageSources, initialEntropy, customLabels = null) {
+function createDecisionTreeSimulation(feature, dataset, imageSources, initialEntropy, customLabels = null, isSecondStep = false) {
     const featureIndex = { 'Smile': 0, 'X-eyes': 1, 'Blink': 2 }[feature];
     const uniqueValues = [...new Set(dataset.map(row => row[featureIndex]))];
     const decisionTreeContainer = document.getElementById('decisionTreeContainer');
+
+    // Filter dataset if it's the second step to focus only on the "Do not Bite" branch
+    const filteredDataset = isSecondStep
+        ? dataset.filter(row => row[featureIndex] === 'Not Smile') // Example filter, adjust as needed
+        : dataset;
 
     // Create the tree container
     const treeContainer = document.createElement('div');
@@ -153,7 +168,7 @@ function createDecisionTreeSimulation(feature, dataset, imageSources, initialEnt
 
         const labelRect = document.createElement('div');
         labelRect.className = 'label-rect';
-        labelRect.textContent = index === 0 ? 'Bite' : 'Do not Bite';
+        labelRect.textContent = index === 0 ? 'Bite' : feature; // Adjust label for second step
         labelRect.style.border = '1px solid #000';
         labelRect.style.borderRadius = '5px';
         labelRect.style.padding = '5px';
@@ -165,7 +180,7 @@ function createDecisionTreeSimulation(feature, dataset, imageSources, initialEnt
         let biteCount = 0;
         let notBiteCount = 0;
 
-        dataset.forEach((row, rowIndex) => {
+        filteredDataset.forEach((row, rowIndex) => {
             if (row[featureIndex] === value) {
                 const img = document.createElement('img');
                 img.src = imageSources[rowIndex];
