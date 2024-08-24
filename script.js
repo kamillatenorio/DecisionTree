@@ -59,7 +59,7 @@ document.getElementById('collectDataBtn').addEventListener('click', function() {
 
         // Generate the decision tree simulations and store information gains
         informationGains.push(createDecisionTreeSimulation('Smile', dataset, imageSources, initialEntropy));
-        informationGains.push(createDecisionTreeSimulation('X-eyes', dataset, imageSources, initialEntropy, ['No X-eyes', 'X-eyes'])); // Corrected label order
+        informationGains.push(createDecisionTreeSimulation('X-eyes', dataset, imageSources, initialEntropy, ['No X-eyes', 'X-eyes']));
         informationGains.push(createDecisionTreeSimulation('Blink', dataset, imageSources, initialEntropy));
 
         // Determine the maximum information gain
@@ -78,9 +78,9 @@ document.getElementById('collectDataBtn').addEventListener('click', function() {
                     // Clear previous trees and show new options
                     decisionTreeContainer.innerHTML = '';
 
-                    // Simulate two new trees for the right branch
-                    createDecisionTreeSimulation('X-eyes', dataset, imageSources, initialEntropy, ['X-eyes', 'No X-eyes'], true);
-                    createDecisionTreeSimulation('Blink', dataset, imageSources, initialEntropy, ['Blink', 'No Blink'], true);
+                    // Create two new trees with "Smile" as root and "X-eyes" and "Blink" as the second node respectively
+                    createSecondStepTree('X-eyes', dataset, imageSources);
+                    createSecondStepTree('Blink', dataset, imageSources);
                 } else {
                     alert("The decision tree learning algorithm should choose the feature that generates more information gain.");
                 }
@@ -127,15 +127,11 @@ function calculateInitialEntropy(dataset) {
     return calculateEntropy(biteCount, notBiteCount);
 }
 
-function createDecisionTreeSimulation(feature, dataset, imageSources, initialEntropy, customLabels = null, isSecondStep = false) {
+// Function to create the first step decision tree
+function createDecisionTreeSimulation(feature, dataset, imageSources, initialEntropy, customLabels = null) {
     const featureIndex = { 'Smile': 0, 'X-eyes': 1, 'Blink': 2 }[feature];
     const uniqueValues = [...new Set(dataset.map(row => row[featureIndex]))];
     const decisionTreeContainer = document.getElementById('decisionTreeContainer');
-
-    // Filter dataset if it's the second step to focus only on the "Do not Bite" branch
-    const filteredDataset = isSecondStep
-        ? dataset.filter(row => row[featureIndex] === 'Not Smile') // Example filter, adjust as needed
-        : dataset;
 
     // Create the tree container
     const treeContainer = document.createElement('div');
@@ -180,7 +176,7 @@ function createDecisionTreeSimulation(feature, dataset, imageSources, initialEnt
         let biteCount = 0;
         let notBiteCount = 0;
 
-        filteredDataset.forEach((row, rowIndex) => {
+        dataset.forEach((row, rowIndex) => {
             if (row[featureIndex] === value) {
                 const img = document.createElement('img');
                 img.src = imageSources[rowIndex];
@@ -242,6 +238,107 @@ function createDecisionTreeSimulation(feature, dataset, imageSources, initialEnt
     decisionTreeContainer.appendChild(treeContainer);
 
     return informationGain; // Return the information gain for this tree
+}
+
+// Function to create the second-step trees
+function createSecondStepTree(secondFeature, dataset, imageSources) {
+    const decisionTreeContainer = document.getElementById('decisionTreeContainer');
+
+    const treeContainer = document.createElement('div');
+    treeContainer.className = 'tree-node';
+
+    // Root node: Smile
+    const rootNode = document.createElement('div');
+    rootNode.className = 'ellipse';
+    rootNode.textContent = 'Smile';
+    treeContainer.appendChild(rootNode);
+
+    const arrowContainer = document.createElement('div');
+    arrowContainer.className = 'arrow-container';
+
+    // Left branch (Smile)
+    const leftBranch = createBranch('Smile', 'Bites', dataset.filter(row => row[0] === 'Smile'), imageSources);
+    arrowContainer.appendChild(leftBranch);
+
+    // Right branch (Not Smile -> Second Feature)
+    const rightBranchContainer = document.createElement('div');
+    rightBranchContainer.className = 'branch';
+
+    const rightLine = document.createElement('div');
+    rightLine.className = 'line';
+    rightLine.style.transform = 'rotate(-45deg)';
+
+    const rightArrowLabel = document.createElement('div');
+    rightArrowLabel.className = 'arrow-label';
+    rightArrowLabel.textContent = 'Not Smile';
+
+    const secondNode = document.createElement('div');
+    secondNode.className = 'ellipse';
+    secondNode.textContent = secondFeature;
+
+    const secondArrowContainer = document.createElement('div');
+    secondArrowContainer.className = 'arrow-container';
+
+    // Second Feature branches
+    const secondBranch1 = createBranch(`${secondFeature}`, `${secondFeature}`, dataset.filter(row => row[0] === 'Not Smile' && row[secondFeatureIndex(secondFeature)] === `${secondFeature}`), imageSources);
+    const secondBranch2 = createBranch(`No ${secondFeature}`, `No ${secondFeature}`, dataset.filter(row => row[0] === 'Not Smile' && row[secondFeatureIndex(secondFeature)] !== `${secondFeature}`), imageSources);
+
+    secondArrowContainer.appendChild(secondBranch1);
+    secondArrowContainer.appendChild(secondBranch2);
+
+    rightBranchContainer.appendChild(rightArrowLabel);
+    rightBranchContainer.appendChild(rightLine);
+    rightBranchContainer.appendChild(secondNode);
+    rightBranchContainer.appendChild(secondArrowContainer);
+
+    arrowContainer.appendChild(rightBranchContainer);
+
+    treeContainer.appendChild(arrowContainer);
+
+    decisionTreeContainer.appendChild(treeContainer);
+}
+
+// Helper function to get the index of a feature
+function secondFeatureIndex(feature) {
+    return { 'X-eyes': 1, 'Blink': 2 }[feature];
+}
+
+// Function to create a branch with a label and associated images
+function createBranch(label, branchLabel, filteredDataset, imageSources) {
+    const branchContainer = document.createElement('div');
+    branchContainer.className = 'branch';
+
+    const line = document.createElement('div');
+    line.className = 'line';
+    line.style.transform = label === 'Smile' ? 'rotate(45deg)' : 'rotate(-45deg)';
+
+    const arrowLabel = document.createElement('div');
+    arrowLabel.className = 'arrow-label';
+    arrowLabel.textContent = label;
+
+    const labelRect = document.createElement('div');
+    labelRect.className = 'label-rect';
+    labelRect.textContent = branchLabel;
+    labelRect.style.border = '1px solid #000';
+    labelRect.style.borderRadius = '5px';
+    labelRect.style.padding = '5px';
+    labelRect.style.margin = '10px 0';
+
+    const imagesContainer = document.createElement('div');
+    imagesContainer.className = 'images-container';
+
+    filteredDataset.forEach((row, rowIndex) => {
+        const img = document.createElement('img');
+        img.src = imageSources[dataset.indexOf(row)];
+        imagesContainer.appendChild(img);
+    });
+
+    branchContainer.appendChild(arrowLabel);
+    branchContainer.appendChild(line);
+    branchContainer.appendChild(labelRect);
+    branchContainer.appendChild(imagesContainer);
+
+    return branchContainer;
 }
 
 // Global variables to make them accessible in both phases
