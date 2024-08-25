@@ -45,7 +45,7 @@ document.getElementById('collectDataBtn').addEventListener('click', function() {
         phaseTitle.textContent = "Training Phase - Step I";
 
         // Update the message text to the training phase instructions
-        message.innerHTML = "The first step in the learning process of a decision tree is to decide which feature to use at the root node (i.e., the node at the very top of the decision tree). <br> But how do you choose what feature to split on at each node? The decision tree learning algorithm has to choose between the features <strong> Smile</strong>, <strong> X-eyes</strong>, and <strong> Blink</strong>. <br>";
+        message.innerHTML = "The first step in the learning process of a decision tree is to decide which feature (<strong> Smile</strong>, <strong> X-eyes</strong>, and <strong> Blink</strong>) to use at the root node that split the data into groups that are as pure as possible. By <i>pure</i> we mean that the group is mostly one type of outcome (either bite or do not bite). <br>  <br><br> From the options below, which feature the decision tree learning algorithm should choose that generates groups with the most putiry?";
 
         // Hide the button
         button.style.display = 'none';
