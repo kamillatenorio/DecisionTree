@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="introduction.css">
     <title>Decision Tree</title>
     <style>
         .container {
@@ -151,6 +152,7 @@
                 The decision tree algorithm needs labelled data from previous monkeys to learn a model from. 
                 <br>Below we have the monkeys that we are already know  if they bite or not (our label).
                 <br/> <img src="Dataset.png" alt="Biting and Non-biting Monkeys" class="intro-image">
+                <br>We can use some of the features of the monkeys such as <i>if it’s smiling</i>, <i>has X-eyes</i>, or <i>can blink</i> to build a decision tree model.
             </p>
             <br/>
             <button id="collectDataBtn">Collect Data</button>
@@ -164,7 +166,7 @@
                             <th>Smile</th>
                             <th>X-Eyes</th>
                             <th>Blink</th>
-                            <th>Bite/Not Bite</th>
+                            <th>Bite/Not Bite (Label)</th>
                         </tr>
                     </thead>
                     <tbody id="tableBody">
