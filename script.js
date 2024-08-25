@@ -45,7 +45,7 @@ document.getElementById('collectDataBtn').addEventListener('click', function() {
         phaseTitle.textContent = "Training Phase - Step I";
 
         // Update the message text to the training phase instructions
-        message.innerHTML = "The first step in the learning process of a decision tree is to decide which feature (<strong> Smile</strong>, <strong> X-eyes</strong>, and <strong> Blink</strong>) to use at the root node that split the data into groups that are as pure as possible. By <i>pure</i> we mean that the group is mostly one type of outcome (either bite or do not bite). <br>  <br><br> From the options below, which feature the decision tree learning algorithm should choose that generates groups with the most putiry?";
+        message.innerHTML = "The first step in the learning process of a decision tree is to decide which feature (<strong> Smile</strong>, <strong> X-eyes</strong>, and <strong> Blink</strong>) to use at the root node that split the data into groups that are as pure as possible. By <i>pure</i> we mean that the group is mostly one type of outcome (either bite or do not bite). <br>  <br><br> From the options below, which feature the decision tree learning algorithm should choose that generates groups with the most putiry? Choose one.";
 
         // Hide the button
         button.style.display = 'none';
@@ -83,7 +83,7 @@ document.getElementById('collectDataBtn').addEventListener('click', function() {
                     });
 
                     // Proceed to the next phase with the selected rectangle
-                    message.innerHTML = "The second step is focusing just on the left part or sometimes called the left branch of the decision tree to decide what nodes to put over there. Since the left node is 100% one class, the mission now is to discover what should be the next feature on the right side.";
+                    message.innerHTML = "The mission now is to discover what should be the next feature (<strong> X-eyes</strong> or <strong> Blink</strong>) to choose that generates groups with most purity? <br> <br> From the options below, which feature the decision tree learning algorithm should choose that generates groups with the most putiry? Choose one.";
 
                     // Create the next set of trees for the second phase
                     decisionTreeContainer.innerHTML = ''; // Clear previous trees
@@ -93,27 +93,21 @@ document.getElementById('collectDataBtn').addEventListener('click', function() {
                     // Add event listener for the correct tree in Step II
                     handleStepII();
                 } else {
-                    alert("The decision tree learning algorithm should choose the feature that generates more information gain. Please try again.");
+                    alert("The decision tree learning algorithm should choose the feature that generates groups with most putriy. Please try again.");
                 }
             });
         });
     }
 });
 
-// Function to handle Step II and end the training phase
 function handleStepII() {
     const treeNodes = document.querySelectorAll('.tree-node');
-    treeNodes.forEach((treeNode) => {
+
+    // Assuming the first rectangle corresponds to index 0, and the second rectangle corresponds to index 1
+    treeNodes.forEach((treeNode, index) => {
         treeNode.addEventListener('click', () => {
-            // Determine the maximum information gain in Step II
-            const informationGains = [...document.querySelectorAll('.information-gain')]
-                .map(gain => parseFloat(gain.textContent.split(': ')[1]));
-            const maxInformationGain = Math.max(...informationGains);
-
-            const selectedGain = parseFloat(treeNode.querySelector('.information-gain').textContent.split(': ')[1]);
-
-            if (selectedGain === maxInformationGain) {
-                // Change the title to "End of Training Phase"
+            if (index === 0) {
+                // User clicked the first rectangle, proceed to "End of Training Phase"
                 document.getElementById('phaseTitle').textContent = "End of Training Phase";
 
                 // Hide all other rectangles except the selected one
@@ -131,8 +125,9 @@ function handleStepII() {
 
                 // Add the "Evaluate your model" button below the tree
                 addEvaluateButton();
-            } else {
-                alert("The decision tree learning algorithm should choose the feature that generates more information gain. Please try again.");
+            } else if (index === 1) {
+                // User clicked the second rectangle, show alert
+                alert("The decision tree learning algorithm should choose the feature that generates groups with most purity. Please try again.");
             }
         });
     });
@@ -478,7 +473,6 @@ function createSecondStepTree(secondFeature, dataset, imageSources, isSecondStep
             // Add the "Evaluate your model" button
             addEvaluateButton();
         } else {
-            alert("Incorrect. Try selecting the tree with the highest information gain.");
         }
     });
 
