@@ -45,7 +45,7 @@ document.getElementById('collectDataBtn').addEventListener('click', function() {
         phaseTitle.textContent = "Training Phase - Step I";
 
         // Update the message text to the training phase instructions
-        message.innerHTML = "The first step in the learning process of a decision tree is to decide which feature (<strong> Smile</strong>, <strong> X-eyes</strong>, and <strong> Blink</strong>) to use at the root node that split the data into groups that are as pure as possible. By <i>pure</i> we mean that the group is mostly one type of outcome (either bite or do not bite). <br>  <br><br> From the options below, which feature the decision tree learning algorithm should choose that generates groups with the most putiry? Choose one.";
+        message.innerHTML = "The first step in the learning process of a decision tree is to decide which feature (i.e., between <strong> Smile</strong>, <strong> X-eyes</strong>, and <strong> Blink</strong>) to use at the root node that split the data into groups that are as pure as possible. By <i>pure</i> we mean that the group is mostly one type of outcome (either bite or do not bite). <br>  <br><br> Observe the groups formed by each of the features, and verify which feature that the decision tree learning algorithm will choose that generates groups with the most purity. Select one.";
 
         // Hide the button
         button.style.display = 'none';
@@ -83,7 +83,7 @@ document.getElementById('collectDataBtn').addEventListener('click', function() {
                     });
 
                     // Proceed to the next phase with the selected rectangle
-                    message.innerHTML = "The mission now is to discover what should be the next feature (<strong> X-eyes</strong> or <strong> Blink</strong>) to choose that generates groups with most purity? <br> <br> From the options below, which feature the decision tree learning algorithm should choose that generates groups with the most putiry? Choose one.";
+                    message.innerHTML = "The mission now is to discover what should be the next remaining feature (<strong> X-eyes</strong> or <strong> Blink</strong>) to choose that generates groups with most purity. <br> <br> From the options below, which feature the decision tree learning algorithm will choose that generates groups with the most purity? Select one.";
 
                     // Create the next set of trees for the second phase
                     decisionTreeContainer.innerHTML = ''; // Clear previous trees
@@ -118,7 +118,7 @@ function handleStepII() {
                 });
 
                 // Update the message
-                document.getElementById('message').textContent = "Congratulations! You have successfully trained the model.";
+                document.getElementById('message').textContent = "Congratulations! Now, we have a trained model that we can use to predict if a monkey bites or not. But first, let's evaluate the model to see if it is predicting correctly.";
 
                 // Clear images, entropy, information gain, and bite stats from the final tree and add proper rectangles
                 clearFinalTreeAndAddLabels(treeNode);
