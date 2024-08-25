@@ -316,7 +316,7 @@ function createDecisionTreeSimulation(feature, dataset, imageSources, initialEnt
 
         const entropyDisplay = document.createElement('div');
         entropyDisplay.className = 'entropy';
-        entropyDisplay.textContent = `Entropy: ${entropy.toFixed(2)}`;
+        entropyDisplay.textContent = ` `;
 
         branchContainer.appendChild(arrowLabel); // Add the label above the line
         branchContainer.appendChild(line); // Add the line between ellipse and images container
@@ -341,7 +341,7 @@ function createDecisionTreeSimulation(feature, dataset, imageSources, initialEnt
         const informationGainDisplay = document.createElement('div');
         informationGainDisplay.className = 'information-gain';
         informationGainDisplay.style.marginTop = '5px';
-        informationGainDisplay.textContent = `Information Gain: ${informationGain.toFixed(2)}`;
+        informationGainDisplay.textContent = ``;
         branchContainer.appendChild(informationGainDisplay);
 
         arrowContainer.appendChild(branchContainer);
@@ -357,13 +357,13 @@ function createDecisionTreeSimulation(feature, dataset, imageSources, initialEnt
     treeEntropyDisplay.className = 'tree-entropy';
     treeEntropyDisplay.style.fontWeight = 'bold';
     treeEntropyDisplay.style.marginTop = '20px';
-    treeEntropyDisplay.textContent = `Tree Entropy: ${treeEntropy.toFixed(2)}`;
+    treeEntropyDisplay.textContent = ``;
 
     const informationGainDisplay = document.createElement('div');
     informationGainDisplay.className = 'information-gain';
     informationGainDisplay.style.fontWeight = 'bold';
     informationGainDisplay.style.marginTop = '10px';
-    informationGainDisplay.textContent = `Overall Information Gain: ${informationGain.toFixed(2)}`;
+    informationGainDisplay.textContent = `  `;
 
     treeContainer.appendChild(treeEntropyDisplay);
     treeContainer.appendChild(informationGainDisplay);
@@ -445,7 +445,7 @@ function createSecondStepTree(secondFeature, dataset, imageSources, isSecondStep
     overallInfoGainDisplay.className = 'information-gain';
     overallInfoGainDisplay.style.fontWeight = 'bold';
     overallInfoGainDisplay.style.marginTop = '10px';
-    overallInfoGainDisplay.textContent = `Overall Information Gain: ${overallInformationGain.toFixed(2)}`;
+    overallInfoGainDisplay.textContent = `  `;
 
     // Add click functionality
     treeContainer.style.cursor = 'pointer'; // Indicate it's clickable
@@ -530,7 +530,7 @@ function createBranch(label, branchLabel, filteredDataset, imageSources, isLeft 
 
     const entropyDisplay = document.createElement('div');
     entropyDisplay.className = 'entropy';
-    entropyDisplay.textContent = `Entropy: ${entropy.toFixed(2)}`;
+    entropyDisplay.textContent = ` `;
 
     branchContainer.appendChild(arrowLabel);
     branchContainer.appendChild(line);
