@@ -1,0 +1,132 @@
+body {
+    font-family: Roboto, Arial;
+  }
+  
+  p {
+    text-align: center;
+    padding-top: 1em;
+  }
+  
+  #aeffchen {
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+    justify-content: space-evenly;
+    align-items: top;
+    flex-wrap: wrap;
+  }
+  
+  .col {
+    width: 50%;
+  }
+  
+  .col-results {
+    width: 40%;
+  }
+  
+  #tree-container {
+    width: 20%;
+  }
+  
+  #tree-container-mobile {
+    align-self: center;
+    width: 60%;
+  }
+  
+  #tree {
+    width: 100%;
+  }
+  
+  #beisst,
+  #beisstnicht {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .monkey {
+    padding: 0.2em;
+  }
+  
+  @media only screen and (min-width: 1201px) {
+    .monkey {
+      width: 20%;
+    }
+    #tree-container-mobile {
+      display: none;
+    }
+  }
+  
+  @media only screen and (max-width: 1200px) {
+    .monkey {
+      width: 30%;
+    }
+    #tree-container-mobile {
+      display: none;
+    }
+  }
+  
+  @media only screen and (max-width: 1023px) {
+    .monkey {
+      width: 30%;
+    }
+    #tree-container-mobile {
+      display: block;
+    }
+    #tree-container {
+      display: none;
+    }
+  }
+  @media only screen and (max-width: 600px) {
+    .monkey {
+      width: 45%;
+    }
+    #tree-container-mobile {
+      display: block;
+      width: 80%;
+    }
+    #tree-container {
+      display: none;
+    }
+  }
+  
+  @media only screen and (max-width: 375px) {
+    .monkey {
+      width: 45%;
+    }
+    text-align: left;
+    #tree-container-mobile {
+      display: block;
+    }
+    #tree-container {
+      display: none;
+    }
+  }
+  
+  #button-row {
+    text-align: center;
+    margin-top: 3em;
+  }
+  
+  a {
+    background-color: #7f512e;
+    border: 1px solid #56371f;
+    display: inline-block;
+    cursor: pointer;
+    color: #ffffff;
+    font-size: 1em;
+    padding: 1em 2em;
+    margin: 1em;
+    text-decoration: none;
+    text-shadow: 0px 1px 0px #56371f;
+    width: 10em;
+    text-align: center;
+  }
+  a:hover {
+    background-color: #56371f;
+  }
+  a:active {
+    position: relative;
+    top: 1px;
+  }

@@ -199,9 +199,11 @@ function addEvaluateButton() {
 
     // Add event listener to the button
     evaluateButton.addEventListener('click', () => {
-        alert("Model evaluation functionality is not yet implemented.");
+        // Redirect to game1.html when the button is clicked
+        window.location.href = 'game1.html';
     });
 }
+
 
 // Function to calculate entropy
 function calculateEntropy(biteCount, notBiteCount) {
