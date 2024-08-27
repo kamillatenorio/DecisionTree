@@ -118,7 +118,7 @@ function handleStepII() {
                 });
 
                 // Update the message
-                document.getElementById('message').textContent = "Congratulations! Now, we have a trained model that we can use to predict if a monkey bites or not. But first, let's evaluate the model to see if it is predicting correctly.";
+                document.getElementById('message').textContent = "Congratulations! Now, we have a trained model that we can use to predict if a monkey bites or not. But first, let's use the model to see if it is predicting correctly.";
 
                 // Clear images, entropy, information gain, and bite stats from the final tree and add proper rectangles
                 clearFinalTreeAndAddLabels(treeNode);
@@ -187,7 +187,7 @@ function addEvaluateButton() {
     const decisionTreeContainer = document.getElementById('decisionTreeContainer');
 
     const evaluateButton = document.createElement('button');
-    evaluateButton.textContent = "Evaluate your model";
+    evaluateButton.textContent = "Use your model";
     evaluateButton.id = "evaluateButton";
     evaluateButton.style.marginTop = "20px";
     evaluateButton.style.padding = "10px 20px";
