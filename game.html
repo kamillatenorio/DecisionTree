@@ -6,156 +6,22 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="introduction.css">
     <title>Decision Tree</title>
-    <style>
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        h1 {
-            text-align: center;
-        }
-        hr {
-            margin: 20px 0;
-        }
-        button {
-            display: block;
-            margin: 20px auto;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        #datasetContainer {
-            margin-top: 20px;
-        }
-        .table-container {
-            display: flex;
-            align-items: flex-start;
-        }
-        img {
-            max-width: 50px;
-            height: auto;
-            margin-right: 10px;
-        }
-        .dataset-table {
-            border-collapse: collapse;
-            width: 100%;
-            margin-left: 10px;
-        }
-        .dataset-table th, .dataset-table td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: center;
-            margin: 0;
-            height: 40px;
-        }
-        .decision-tree {
-            margin-top: 40px;
-            display: flex;
-            justify-content: space-around;
-            align-items: flex-start;
-        }
-        .tree-node {
-            text-align: center;
-            width: 300px;
-            position: relative;
-            border: 2px solid #333; /* Add border around each tree */
-            padding: 20px;
-            border-radius: 10px; /* Rounded corners */
-            background-color: #f9f9f9; /* Light background color */
-            margin-bottom: 20px;
-        }
-        .ellipse {
-            width: 120px;
-            height: 70px;
-            border-radius: 50%;
-            border: 2px solid black;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto;
-            background-color: white;
-            position: relative;
-        }
-        .arrow-container {
-            display: flex;
-            justify-content: space-between;
-            position: relative;
-            margin-top: 10px;
-        }
-        .branch {
-            text-align: center;
-            position: relative;
-            width: 45%;
-        }
-        .branch .arrow {
-            width: 2px;
-            background-color: black;
-            position: absolute;
-            top: 70px; /* Start from the bottom of the ellipse */
-            left: 50%;
-            transform: translateX(-50%);
-            height: 60px; /* Adjust height to connect with the rectangle */
-        }
-        .branch .arrow:after {
-            content: '';
-            position: absolute;
-            left: -4px;
-            top: 100%;
-            border: solid black;
-            border-width: 0 3px 3px 0;
-            padding: 5px;
-            transform: rotate(45deg);
-        }
-        .label-rect {
-            border: 1px solid #000;
-            border-radius: 5px;
-            padding: 5px;
-            margin: 10px 0;
-            width: 100px;
-            margin: 10px auto;
-            background-color: #fff;
-        }
-        .images-container {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-top: 10px;
-        }
-        .bite-stats, .entropy, .tree-entropy, .information-gain {
-            font-weight: bold;
-            margin-top: 5px;
-        }
-        .line {
-            width: 2px;
-            height: 50px;
-            background-color: black;
-            margin: 0 auto;
-            transform-origin: top center;
-        }
-        .intro-image {
-            margin-top: 20px;
-            max-width: 100%;
-            height: auto;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-        }
-    </style>
 </head>
 <body>
     <div class="container">
-        <h1 id="phaseTitle">Data Collection Phase</h1>
+    <h1 id="phaseTitle">Data Collection Phase</h1>
         <hr/>
         <div id="controls">
             <p id="message">
-                The decision tree algorithm needs labelled data from previous monkeys to learn a model from. 
-                <br>Below, we have the monkeys that we already know if they bite or not (our labels).
+                The decision tree algorithm needs labeled data from previous monkeys to learn a model from it.
+                <br>
+                Below we see the monkeys for which we already know whether they <strong>bite</strong> or <strong>do not bite</strong> (our <strong>labels</strong>).
                 <br/> <img src="Dataset.png" alt="Biting and Non-biting Monkeys" class="intro-image">
-                <br>We can use some of the features of the monkeys such as <i>if it’s smiling</i>, <i>has X-eyes</i>, or <i>can blink</i> to build a decision tree model to learn the patterns of the monkeys that bite and monkeys that do not bite.
+                <br>
+                We can use some of the monkeys' features, such as whether they are smiling, winking, or have X-eyes, to learn a decision tree model that can predict whether new monkeys will bite or not.
             </p>
             <br/>
-            <button id="collectDataBtn">Collect Data</button>
+            <button class="button" id="collectDataBtn">Collect Data</button>
         </div>
         <div id="datasetContainer" style="display:none;">
             <div class="table-container">
@@ -165,7 +31,7 @@
                             <th></th> 
                             <th>Smile</th>
                             <th>X-Eyes</th>
-                            <th>Blink</th>
+                            <th>Wink</th>
                             <th>Bite/Not Bite (Label)</th>
                         </tr>
                     </thead>
@@ -175,6 +41,12 @@
             </div>
         </div>
         <div id="decisionTreeContainer" class="decision-tree"></div>
+    </div>
+    <div id="tipModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p id="modalMessage">Your message here...</p>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>

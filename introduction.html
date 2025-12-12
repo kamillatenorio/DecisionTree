@@ -3,83 +3,164 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to Linear Regression Game</title>
+    <title>Introduction</title>
     <link rel="stylesheet" href="introduction.css">
-    <style>
-        .button {
-            display: none; /* Hide the button initially */
-        }
-    </style>
 </head>
 <body>
-    <div class="container">        
-        <div class="slideshow-container">
-            <div class="slides">
-                <div class="slide">
-                    <img src="Frame 2.svg" alt="Slide 2">
+    <div class="container">
+
+        <div class="slider-container">
+            <!-- Slide 1 -->
+            <div class="slide">
+                <div class="image-section">
+                    <img src="pikaso_edit 1.png" alt="Zoo Keeper and Monkey">
                 </div>
-                <div class="slide">
-                    <img src="Frame 3.svg" alt="Slide 2">
-                </div>
-                <div class="slide">
-                    <img src="Frame 4.svg" alt="Slide 4">
-                </div>
-                <div class="slide">
-                    <img src="Frame 5.svg" alt="Slide 5">
-                </div>
-                <div class="slide">
-                    <img src="Frame 6.svg" alt="Slide 5">
+                <div class="text-section">
+                    <h2>
+                        We are <strong>zookeepers</strong> in a zoo and <strong>responsible for feeding the monkeys.</strong>
+                    </h2>
+                    <br>
+                    <h2>
+                        The monkeys look very cute, but we have to be careful, because some of the monkeys bite.
+                    </h2>
                 </div>
             </div>
-            <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-            <a class="next" onclick="plusSlides(1)">&#10095;</a>
-        </div>
 
-        <button class="button" onclick="window.location.href='game.html'">Let's Go!</button>
+            <!-- Slide 2 -->
+            <div class="slide">
+                <div class="image-section">
+                    <img src="jungle-explorers-vector-illustration 1.png" alt="Another Image">
+                </div>
+                <div class="text-section">
+                    <h2>
+                        We already know <strong>which of the monkeys</strong> currently in our zoo bite and which do not.
+                    </h2>
+                    <br>
+                    <h2>
+                        But new monkeys are coming to our zoo and joining the group of monkeys.
+                    </h2>
+                    <br>
+                    <h2>
+                        So we need to find a way to figure out which of these new monkeys bite and which do not – preferably without getting too close to their teeth.
+                    </h2>
+                </div>
+            </div>
+
+            <!-- Slide 3 -->
+            <div class="slide">
+                <div class="text-section">
+                    <h2>
+                        We have decided to list which of our current monkeys bite and which do not.
+                    </h2>
+                </div>
+                <div class="image-section">
+                    <img src="Dataset.png" alt="Monkeys with Features">
+                </div>
+                <div class="text-section">
+                    <h2>
+                        As we can see, the monkeys differ in certain features, such as the shape of their eyes and whether they are smiling or winking.
+                    </h2>
+                </div>
+            </div>
+
+            <!-- Slide 4 (Multiple Choice Question with Image) -->
+            <div class="slide">
+                <div class="image-section">
+                    <img src="jungle-explorers-vector-illustration 1.png" alt="Supervised Learning">
+                </div>
+                <div class="text-section">
+                    <h2>
+                        What do we call the properties of things in the context of supervised learning?
+                    </h2>
+                    <form id="quiz-form-4">
+                        <label>
+                            <input type="radio" name="answer" value="A">
+                            A) Features
+                        </label><br>
+                        <label>
+                            <input type="radio" name="answer" value="B">
+                            B) Labels
+                        </label><br>
+                        <label>
+                            <input type="radio" name="answer" value="C">
+                            C) Values
+                        </label><br>
+                        <label>
+                            <input type="radio" name="answer" value="D">
+                            D) Outputs
+                        </label><br><br>
+                        <button type="button" class="button" onclick="checkAnswerSlide4()">Submit</button>
+                    </form>
+                    <br>
+                    <p id="feedback-4" style="display:none;"></p>
+                </div>
+            </div>
+
+            <!-- Slide 5 (Matching Layout with Slide 3) -->
+            <div class="slide">
+                <div class="text-section">
+                    <h2>
+                        Our task is to find a way, based on the features of the monkeys, that helps us determine whether new monkeys coming to the zoo will bite or not.
+                    </h2>
+                </div>
+                <div class="image-section">
+                    <img src="Dataset.png" alt="Monkeys with Features">
+                </div>
+                <div class="text-section">
+                    <h2> 
+                        How can we do that?
+                    </h2>
+                </div>
+            </div>
+
+            <!-- Slide 6 (New Multiple Choice Question) -->
+            <!--<div class="slide">
+                <div class="image-section">
+                    <img src="jungle-explorers-vector-illustration 1.png" alt="Problem Solving Image">
+                </div>
+                <div class="text-section">
+                    <h2>
+                        How can we solve this problem?
+                    </h2>
+                    <form id="quiz-form-6">
+                        <label>
+                            <input type="radio" name="solution" value="A">
+                            A) Observe the monkeys closely for several days.
+                        </label><br>
+                        <label>
+                            <input type="radio" name="solution" value="B">
+                            B) Create a model based on the data of the known monkeys.                        </label><br>
+                        <label>
+                            <input type="radio" name="solution" value="C">
+                            C) Ask another zoo that has the same species.                        </label><br><br>
+                        <button  type="button" class="button" onclick="checkAnswerSlide6()">Submit</button>
+                    </form>
+                    <br>
+                    <p id="feedback-6" style="display:none;"></p>
+                </div>
+            </div>-->
+
+            <div class="slide">
+                <div class="text-section">
+                    <h2>
+                        We can use a supervised learning algorithm to automatically create a model that can predict whether monkeys will bite or not.                    </h2>
+                </div>
+                <div class="image-section">
+                    <img src="Dataset.png" alt="Monkeys with Features">
+                </div>
+                <div class="text-section">
+                    <h1>
+                        Let's use the decision tree learning algorithm.
+                    </h1>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <script>
-        let slideIndex = 0;
+    <!-- Arrows (Prev and Next) -->
+    <a class="prev" id="prev" onclick="changeSlide(-1)">&#10094;</a>
+    <a class="next" id="next" onclick="changeSlide(1)">&#10095;</a>    
 
-        function showSlides(n) {
-            const slides = document.getElementsByClassName("slide");
-            const button = document.querySelector('.button');
-            const prev = document.querySelector('.prev');
-            const next = document.querySelector('.next');
-
-            if (n >= slides.length) { slideIndex = slides.length - 1; } // Adjust to show the last slide instead of looping
-            if (n < 0) { slideIndex = 0; } // Adjust to show the first slide instead of looping
-            
-            for (let i = 0; i < slides.length; i++) {
-                slides[i].style.display = "none";
-            }
-            slides[slideIndex].style.display = "block";
-            
-            // Show the button if on the last slide
-            if (slideIndex === slides.length - 1) {
-                button.style.display = "block";
-                next.style.display = "none"; // Hide next icon on the last slide
-            } else {
-                button.style.display = "none";
-                next.style.display = "block"; // Show next icon if not on the last slide
-            }
-
-            // Hide prev icon on the first slide
-            if (slideIndex === 0) {
-                prev.style.display = "none";
-            } else {
-                prev.style.display = "block";
-            }
-        }
-
-        function plusSlides(n) {
-            slideIndex += n;
-            showSlides(slideIndex);
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            showSlides(slideIndex);
-        });
-    </script>
+    <script src="introduction.js"></script>
 </body>
 </html>
