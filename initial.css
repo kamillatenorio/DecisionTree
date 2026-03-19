@@ -41,6 +41,35 @@ body {
     background-color: rgb(98, 126, 110);
 }
 
+.fullscreen-btn {
+position: fixed;
+top: 40px;
+left: 20px;
+z-index: 1000;
+background-color: rgb(98, 126, 110);
+border: none;
+color: white;
+font-size: 20px;
+border-radius: 50%;
+width: 50px;
+height: 50px;
+cursor: pointer;
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+display: flex;
+align-items: center;
+justify-content: center;
+transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.fullscreen-btn:hover {
+background-color: rgb(78, 106, 90);
+transform: scale(1.05);
+}
+
+.fullscreen-btn:active {
+transform: scale(0.95);
+}
+
 h1 {
     font-size: 3rem;
     color: #333;

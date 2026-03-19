@@ -32,7 +32,11 @@ function showSlide(index) {
     if (currentSlideIndex === slides.length - 1) {
         nextArrow.textContent = "-›"; // Change Next button text
         nextArrow.onclick = () => {
-            window.location.href = "game.html"; // Redirect to game.html when clicked
+            if (typeof navigateWithFullscreen === "function") {
+                navigateWithFullscreen("game.html"); // Redirect to game.html while keeping fullscreen preference
+            } else {
+                window.location.href = "game.html";
+            }
         };
     } else {
         nextArrow.textContent = "›"; // Restore the default Next arrow

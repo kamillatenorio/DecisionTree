@@ -233,7 +233,11 @@ function addEvaluateButton() {
     // Add event listener to the button
     evaluateButton.addEventListener('click', () => {
         // Redirect to game1.html when the button is clicked
-        window.location.href = 'game1.html';
+        if (typeof navigateWithFullscreen === 'function') {
+            navigateWithFullscreen('game1.html');
+        } else {
+            window.location.href = 'game1.html';
+        }
     });
 }
 
